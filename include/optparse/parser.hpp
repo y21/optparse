@@ -10,14 +10,14 @@ namespace optparse {
 		char value[__OPTPARSE_DEFAULT_BUFF__];
 	} option;
 	
-	option* parse(int __argc, char** __argv, const char* _opt) {
+	option* parse(int __argc, char** __argv, const char* __opt) {
 		int optCount = 0;
 		int optLimit = __OPTPARSE_OPT_COUNT__;
 		option* options = (option*)malloc(sizeof(option) * optLimit);
 		for (int i = 0; i < __argc; ++i) {
 			const int len = strlen(__argv[i]);
 			for (int j = 0; j < len; ++j) {
-				if (__argv[i][j] == '-' && j + 1 <= len) {
+				if (__argv[i][j] == '-' && j + 1 <= len && strchr(__opt, __argv[i][j + 1]) != NULL && __argv[i][j + 1] != ':') {
 					option opt;
 					opt.name = __argv[i][j + 1];
 					if (optCount >= optLimit)

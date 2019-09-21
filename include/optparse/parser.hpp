@@ -22,7 +22,7 @@ namespace optparse {
 					for (int j = 0; j < len; ++j) {
 						const char current_char = __argv[i][j];
 						const char next_char = __argv[i][j+1];
-						if (current_char == '-' && j + 1 <= len && strchr(__opt, next_char) != NULL && next_char != ':') {
+						if (current_char == '-' && j + 1 <= len && (!strcmp((const char*)__opt, "*") || strchr(__opt, next_char) != NULL) && next_char != ':') {
 							option opt;
 							opt.name = __argv[i][j + 1];
 

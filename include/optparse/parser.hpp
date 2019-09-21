@@ -45,12 +45,6 @@ namespace optparse {
 		}
 		return options;
 	}
-	
-	option* parse(char* __argv, const char* __opt) {
-		char** __argvP = (char**) malloc(sizeof(char) * strlen(__argv));
-		__argvP[0] = __argv;
-		return parse(1, __argvP, __opt);
-	}
 }
 
 #endif

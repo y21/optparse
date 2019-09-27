@@ -1,7 +1,7 @@
 #ifndef __OPTPARSE__
 #define __OPTPARSE__
 #define __OPTPARSE_DEFAULT_BUFF__ 0x10
-#define __OPTPARSE_OPT_COUNT__ 0x8
+#define __OPTPARSE_OPT_COUNT__ 0x10
 #include <stdlib.h>
 #include <cstring>
 namespace optparse {
@@ -16,25 +16,25 @@ namespace optparse {
 			int option_limit = __OPTPARSE_OPT_COUNT__;
 			option* options = (option*) malloc(sizeof(option) * option_limit);
 		public:
-			parser(int __argc, char** __argv, char* __opt) {
-				for (int i = 0; i < __argc; ++i) {
-					const int len = strlen(__argv[i]);
+			parser(int _argc, char** _argv, const char* _opt) {
+				for (int i = 0; i < _argc; ++i) {
+					const int len = strlen(_argv[i]);
 					for (int j = 0; j < len; ++j) {
-						const char current_char = __argv[i][j];
-						const char next_char = __argv[i][j+1];
-						if (current_char == '-' && j + 1 <= len && (!strcmp((const char*)__opt, "*") || strchr(__opt, next_char) != NULL) && next_char != ':') {
+						const char current_char = _argv[i][j];
+						const char next_char = _argv[i][j+1];
+						if (current_char == '-' && j + 1 <= len && (!strcmp((const char*)_opt, "*") || strchr(_opt, next_char) != NULL) && next_char != ':') {
 							option opt;
-							opt.name = __argv[i][j + 1];
+							opt.name = _argv[i][j + 1];
 
-							if (__argv[i + 1] && __argv[i + 1][0] != '-') {
+							if (_argv[i + 1] && _argv[i + 1][0] != '-') {
 								int opt_val_index = 0;
 								int opt_val_limit = __OPTPARSE_DEFAULT_BUFF__;
 								opt.value = (char*)malloc(sizeof(char) * opt_val_limit);
-								for (int k = 0; k < strlen(__argv[i + 1]); ++k) {
+								for (int k = 0; k < strlen(_argv[i + 1]); ++k) {
 									if (opt_val_index >= opt_val_limit) {
 										opt.value = (char*)realloc(opt.value,  opt_val_limit *= 2);
 									}
-									opt.value[opt_val_index++] = __argv[i + 1][k];
+									opt.value[opt_val_index++] = _argv[i + 1][k];
 								}
 								opt.value[opt_val_index] = '\0';
 							}

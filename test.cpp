@@ -6,7 +6,9 @@ int main(int argc, char** argv) {
 	// Alternatively, you could pass "abc" for example
 	// to only listen for options "a", "b" and "c"
 	// Like you would using getopt()
-	optparse::parser parser(argc, argv, (char*)"*");
+	
+	optparse::parser parser(argc, argv, "*");
+
 	// Get all options and store it in opts
 	optparse::option* opts = parser.get_options();
 

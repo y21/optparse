@@ -60,6 +60,14 @@ namespace optparse {
 				return this->options;
 			}
 
+			option get_option(char name) const {
+				for (int i = 0; i < this->option_count; ++i) {
+					if (name == this->options[i].name) {
+						return this->options[i];
+					}
+				}
+			}
+
 			~parser() {
 				free(this->options);
 			}

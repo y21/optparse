@@ -37,5 +37,8 @@ This method can be ignored. It is used to determine if new memory needs to be al
 ##### optparse::parser::get\_options (`const method: returns optparse::option*`)
 This method returns an `optparse::option` array which holds all options.
 
+##### optparse::parser::get\_option (`const method: returns optparse::option`)
+This method returns an instance of `optparse::option` and takes a char as parameter, which the parser will search for.
+
 #### ~optparse::parser (`destructor`)
 Frees allocated memory (`this->options` and other data)

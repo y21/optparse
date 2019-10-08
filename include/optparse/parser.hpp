@@ -1,3 +1,7 @@
+//  optparse
+//
+//  Copyright (c) 2019 y21. All rights reserved.
+//  MIT License
 #ifndef __OPTPARSE__
 #define __OPTPARSE__
 #define __OPTPARSE_DEFAULT_BUFF__ 0x10

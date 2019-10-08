@@ -5,8 +5,8 @@
 
 int main(int argc, char** argv) {
 
-	// Create instance of optparse::parser
-	optparse::parser parser(argc, argv, "*");
+	// Create instance of optparse::parser and listen for options "a", "b", and "c"
+	optparse::parser parser(argc, argv, "abc");
 
 	// Get options
 	std::vector<optparse::option> opts = parser.get_options();

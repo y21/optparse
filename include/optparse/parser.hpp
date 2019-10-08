@@ -41,7 +41,7 @@ namespace optparse {
 
 						if (current_char == '-' && 
 							j <= value_length && 
-							(!strcmp(options, "*") || !strchr(options, next_char))) {
+							(!strcmp(options, "*") || strchr(options, next_char) != NULL)) {
 								// ^ might cause bug, changed strchr() != NULL to !strchr(); check git
 								option opt = {"", ""};
 

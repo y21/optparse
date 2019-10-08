@@ -1,75 +1,88 @@
+//  optparse
+//
+//  Copyright (c) 2019 y21. All rights reserved.
+//  MIT License
 #ifndef __OPTPARSE__
 #define __OPTPARSE__
 #define __OPTPARSE_DEFAULT_BUFF__ 0x10
 #define __OPTPARSE_OPT_COUNT__ 0x10
-#include <stdlib.h>
-#include <cstring>
-namespace optparse {
-	typedef struct {
-		char name;
-		char* value;
-	} option;
 
+#include <stdlib.h>
+#include <string>
+#include <cstring>
+#include <vector>
+#include <stdexcept>
+
+namespace optparse {
+	/// @brief Represents an option that was found
+	struct option {
+		/// Holds the option name
+		std::string name;
+
+		/// Holds the option value
+		std::string value;
+	};
+
+	/// @brief The class that parses options
 	class parser {
 		private:
-			int option_count = 0;
-			int option_limit = __OPTPARSE_OPT_COUNT__;
-			option* options = (option*) malloc(sizeof(option) * option_limit);
+			std::vector<option> options;
 		public:
-			parser(int _argc, char** _argv, const char* _opt) {
-				for (int i = 0; i < _argc; ++i) {
-					const int len = strlen(_argv[i]);
-					for (int j = 0; j < len; ++j) {
-						const char current_char = _argv[i][j];
-						const char next_char = _argv[i][j+1];
-						if (current_char == '-' && j + 1 <= len && (!strcmp((const char*)_opt, "*") || strchr(_opt, next_char) != NULL) && next_char != ':') {
-							option opt;
-							opt.name = _argv[i][j + 1];
+			/// @brief Constructor that parses options
+			// @param argument_count The number of argument_values
+			// @param argument_values An array of char* containing text that will be searched for options
+			// @param options A C-String that specifies what to search for; use * to listen for all options
+			parser(int argument_count, char** argument_values, const char* options) {
+				for (int i = 0; i < argument_count; ++i) {
+					const int value_length = strlen(argument_values[i]);
+					for (int j = 0; j < value_length; ++j) {
+						const char current_char = argument_values[i][j];
+						const char next_char    = argument_values[i][j + 1];
 
-							if (_argv[i + 1] && _argv[i + 1][0] != '-') {
-								int opt_val_index = 0;
-								int opt_val_limit = __OPTPARSE_DEFAULT_BUFF__;
-								opt.value = (char*)malloc(sizeof(char) * opt_val_limit);
-								for (int k = 0; k < strlen(_argv[i + 1]); ++k) {
-									if (opt_val_index >= opt_val_limit) {
-										opt.value = (char*)realloc(opt.value,  opt_val_limit *= 2);
+						if (current_char == '-' && 
+							j <= value_length && 
+							(!strcmp(options, "*") || !strchr(options, next_char))) {
+								// ^ might cause bug, changed strchr() != NULL to !strchr(); check git
+								option opt = {"", ""};
+
+								// Parse option name
+								for (int k = 1; k < value_length; ++k) {
+									const char current_char_k = argument_values[i][k];
+									if ((current_char_k >= 65 && current_char_k <= 90) || (current_char_k >= 97 && current_char_k <= 122)) {
+										opt.name += current_char_k;
+									} else { // space; indicates beginning of value
+										break;
 									}
-									opt.value[opt_val_index++] = _argv[i + 1][k];
 								}
-								opt.value[opt_val_index] = '\0';
-							}
 
+								// Parse option value
+								for (int k = 0; k < strlen(argument_values[i + 1]); ++k) {
+									const char current_char_k = argument_values[i + 1][k];
+									if (current_char_k != 32) {
+										opt.value += current_char_k;
+									} else { // space; indicates end of value
+										break;
+									}
+								}
+								// Check if option name is empty
+								// This may be because argument_values has - in it followed by a character that is not A-Za-z
+								if (opt.name == "") throw std::runtime_error("Invalid option name");
 
-							if (this->option_count >= this->option_limit)
-								this->options = (option*) realloc(this->options, sizeof(option) * (this->option_limit *= 2));
-							this->options[this->option_count++] = opt;
+								this->options.push_back(opt);
 						}
 					}
 				}
 			}
-			
-			int get_option_count() const {
-				return this->option_count;
-			}
 
-			int get_option_limit() const {
-				return this->option_limit;
-			}
-
-			option* get_options() const {
+			/// @brief Returns a vector of all options that were found in argument_values
+			std::vector<option>& get_options() {
 				return this->options;
 			}
 
-			option get_option(char name) const {
-				for (int i = 0; i < this->option_count; ++i) {
-					if (name == this->options[i].name) {
-						return this->options[i];
-					}
-				}
-			}
-
-			~parser() {
-				free(this->options);
+			/// @brief Sets options of this instance
+			/// @param options A vector of option objects
+			void set_options(std::vector<option> options) {
+				this->options = options;
 			}
 	};
 }

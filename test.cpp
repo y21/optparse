@@ -1,5 +1,4 @@
 #include <optparse/parser.hpp>
-#include <stdio.h>
 #include <vector>
 #include <iostream>
 

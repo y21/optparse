@@ -1,13 +1,14 @@
 # optparse
-A cross-platform header-only C++ library to parse unix-like options. This should work on all platforms, as it only uses native headers.
+A lightweight cross-platform header-only C++ library to parse unix-like options. This works on all platforms, as it only uses native headers.
 
 | | [optparse](https://github.com/y21/optparse) | [argh](https://github.com/aardvarkk/argh) |
 |-|------------|---------------|
 | Size | 2 KB | 7 KB |
 | Raw String Manipulation | Yes | Yes |
-| Execution time\* | 11.22 ms | 12.52 ms
+| Execution time\* | 10.8644 ms | 11.0292 ms |
+| Documentation | Yes | Only examples |
 
-<sub>\* Calculated by calling each library 1000 times and taking the average time.</sub>
+<sub>\* Calculated by calling each library 2500 times and taking the average time.</sub>
 
 ### Why?
 `getopt()` (defined in `unistd.h`) is not available on Windows and other operating systems, so I have decided to write a simple library that parses options.
